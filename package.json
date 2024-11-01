@@ -3,7 +3,7 @@
   "version": "1.59.0",
   "private": true,
   "engines": {
-    "node": "22.10.0",
+    "node": ">=16",
     "pnpm": "9.6.0"
   },
   "packageManager": "pnpm@9.6.0",
@@ -25,7 +25,7 @@
     "lint:nodes": "turbo run lint:nodes",
     "lint:frontend": "turbo run lint:frontend",
     "optimize-svg": "find ./packages -name '*.svg' ! -name 'pipedrive.svg' -print0 | xargs -0 -P16 -L20 npx svgo",
-    "start": "run-script-os",
+    "start": "n8n start",
     "start:default": "cd packages/cli/bin && ./n8n",
     "start:tunnel": "./packages/cli/bin/n8n start --tunnel",
     "start:windows": "cd packages/cli/bin && n8n",
