@@ -10,17 +10,20 @@ COPY package.json pnpm-lock.yaml ./
 # Install pnpm globally
 RUN npm install -g pnpm@9.6.0
 
-# Copy the patches folder if it exists (avoids missing file errors)
+# Copy patches folder if it exists
 COPY patches ./patches
 
+# Verify if patches folder exists
+RUN if [ -d "./patches" ]; then echo "Patches folder exists"; else echo "No patches folder found"; fi
+
 # Install dependencies
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile || { echo "pnpm install failed"; exit 1; }
 
 # Copy the rest of the application code into the container
 COPY . ./
 
 # Build the application (if needed for your use case)
-RUN pnpm run build
+RUN pnpm run build || { echo "pnpm build failed"; exit 1; }
 
 # Expose the port the application runs on
 EXPOSE 5678
