@@ -4,11 +4,14 @@ FROM node:18.17.0
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the package.json and package-lock.json into the container
+# Copy the package.json and pnpm-lock.yaml into the container
 COPY package.json pnpm-lock.yaml ./
 
 # Install pnpm globally
 RUN npm install -g pnpm@9.6.0
+
+# Copy the patches folder if it exists (avoids missing file errors)
+COPY patches ./patches
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
