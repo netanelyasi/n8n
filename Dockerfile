@@ -1,12 +1,26 @@
-FROM node:16-alpine
+# Use a Node.js version compatible with the requirements
+FROM node:18.17.0
 
-RUN apk add --update graphicsmagick tzdata
+# Set the working directory inside the container
+WORKDIR /app
 
-ENV NODE_ENV=production
-ENV N8N_SKIP_STATISTICS_LOGGING=true
+# Copy the package.json and package-lock.json into the container
+COPY package.json pnpm-lock.yaml ./
 
-RUN npm install -g n8n
+# Install pnpm globally
+RUN npm install -g pnpm@9.6.0
 
-EXPOSE ${PORT}
+# Install dependencies
+RUN pnpm install --frozen-lockfile
 
-CMD n8n start
+# Copy the rest of the application code into the container
+COPY . ./
+
+# Build the application (if needed for your use case)
+RUN pnpm run build
+
+# Expose the port the application runs on
+EXPOSE 5678
+
+# Specify the command to run the application
+CMD ["pnpm", "start"]
